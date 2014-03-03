@@ -1,0 +1,7 @@
+[ "cowboy": {:git, "git://github.com/extend/cowboy.git", "e7afe1f381f93f0c4df3680ff55dae111e864c9f", []},
+  "cowlib": {:git, "git://github.com/extend/cowlib.git", "0d4ece08a7cce90a07cf33d4edad29bc324c7d90", [ref: "0.5.1"]},
+  "json": {:git, "git://github.com/cblage/elixir-json.git", "02ca5d39657049a362f92f87850d9b811742879f", []},
+  "mime": {:git, "git://github.com/dynamo/mime.git", "db84370c53a67a7e58a4d0cfb026f4edc64a9367", []},
+  "pacman": {:git, "git://github.com/zampino/pacman.git", "04c99e0001b125115f3b037f1e89f3b5aa2f23ab", []},
+  "plug": {:git, "git://github.com/elixir-lang/plug.git", "c735ee21ab8384ab47ac27feb56cc509641fdc6d", []},
+  "ranch": {:git, "git://github.com/extend/ranch.git", "5df1f222f94e08abdcab7084f5e13027143cc222", [ref: "0.9.0"]} ]
