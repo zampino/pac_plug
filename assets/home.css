@@ -1,0 +1,19 @@
+/*
+ * PacPlug Grid & CO.
+ */
+
+.cell {
+  height: 20px;
+  width: 20px;
+  border: 1px solid black;
+  margin-top: 5px;
+  margin-right: 5px;
+  float: left;
+}
+
+.cell.me {
+  background-color: lime;
+}
+.cell.moo {
+  background-color: magenta;
+}

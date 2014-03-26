@@ -1,10 +1,10 @@
-defmodule Lab.Mixfile do
+defmodule PacPlug.Mixfile do
   use Mix.Project
 
   def project do
-    [ app: :lab,
-      version: "0.0.1",
-      elixir: "~> 0.12.4",
+    [ app: :pac_plug,
+      version: "0.1.0",
+      elixir: "~> 0.12.5",
       deps: deps ]
   end
 

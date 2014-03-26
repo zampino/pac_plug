@@ -1,18 +1,15 @@
-<!DOCTYPE html >
+<!DOCTYPE html>
 <html>
 <head>
 <title>Pacman Lab</title>
+<script src="/assets/home.js"></script>
+<script src="/assets/jquery.js"></script>
+<link rel="stylesheet" href="/assets/home.css"></link>
 </head>
 <body>
 <h1>Hi!</h1>
-
-
-<script>
-var source = new EventSource('stream');
-source.addEventListener('message', function(e) {
-  console.log(e.data);
-}, false);
-</script>
-
+<div id="controls"></div>
+<div id="grid"></div>
+<script>window.app = new HomeView()</script>
 </body>
 </html>
