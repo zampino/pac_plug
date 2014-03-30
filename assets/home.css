@@ -10,10 +10,3 @@
   margin-right: 5px;
   float: left;
 }
-
-.cell.me {
-  background-color: lime;
-}
-.cell.moo {
-  background-color: magenta;
-}
