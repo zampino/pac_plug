@@ -60,15 +60,28 @@
     };
 
     HomeView.prototype.keyboardBindings = function() {
+      var dirMap;
+      dirMap = {
+        37: "left",
+        38: "up",
+        39: "right",
+        40: "down"
+      };
       return $(window).on('keyup', (function(_this) {
         return function(e) {
-          return console.log(e.key);
+          var dir, key;
+          key = "" + e.which;
+          if (!_.include(_.keys(dirMap), key)) {
+            return;
+          }
+          console.log("key:", e.which, (dir = dirMap[key]));
+          return _this.turn(dir);
         };
       })(this));
     };
 
     HomeView.prototype.turn = function(direction) {
-      return $.ajax("pacmans/turn/" + name + "/" + direction, {
+      return $.ajax("pacmans/turn/" + this.name + "/" + direction, {
         type: "PUT"
       });
     };
@@ -92,6 +105,7 @@
     _.extend(Grid.prototype, Utils);
 
     function Grid(id) {
+      this.errback = __bind(this.errback, this);
       this.update = __bind(this.update, this);
       this.$el = $('#grid');
       this.buildCells();
@@ -156,14 +170,11 @@
       x = pacman.position.x;
       y = pacman.position.y;
       this.cells.removeClass(pacman.name);
-      this.cell(x, y).addClass(pacman.name);
-      return console.log(this.cell(x, y));
+      return this.cell(x, y).addClass(pacman.name);
     };
 
     Grid.prototype.update = function(event) {
       var pacman, pacmans, _i, _len, _results;
-      console.log(event.data);
-      return true;
       pacmans = JSON.parse(event.data);
       if (pacmans.length > 0) {
         this.updateNames((function() {
@@ -175,7 +186,6 @@
           }
           return _results;
         })());
-        console.log("aho!", this.names);
         _results = [];
         for (_i = 0, _len = pacmans.length; _i < _len; _i++) {
           pacman = pacmans[_i];

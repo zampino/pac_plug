@@ -5,6 +5,7 @@ defmodule PacPlug.Mixfile do
     [ app: :pac_plug,
       version: "0.1.0",
       elixir: "~> 0.12.5",
+			github: "zampino/pac_plug",
       deps: deps ]
   end
 
@@ -15,7 +16,7 @@ defmodule PacPlug.Mixfile do
 
   defp deps do
     [{ :cowboy, github: "extend/cowboy" },
-		 { :pacman, path: "../pacman"},
+		 { :pacman, github: "zampino/pacman", branch: "master"},
      { :plug, "0.3.0", github: "elixir-lang/plug" }]
   end
 end

@@ -10,7 +10,6 @@ defmodule PacPlug do
 	def boot do
 		Pacman.boot
 		Plug.Adapters.Cowboy.http PacPlug, []
-		PacPlug.Router.boot
 	end
 
 	def call(conn, _opts) do

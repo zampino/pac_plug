@@ -37,11 +37,19 @@ class @HomeView
       @addPacman()
 
   keyboardBindings: ->
+    dirMap =
+      37: "left"
+      38: "up"
+      39: "right"
+      40: "down"
     $(window).on 'keyup', (e)=>
-      console.log e.key
+      key = "#{e.which}"
+      return unless _.include( _.keys(dirMap), key)
+      console.log "key:", e.which, (dir = dirMap[key])
+      @turn dir
 
   turn: (direction)->
-    $.ajax "pacmans/turn/#{name}/#{direction}",
+    $.ajax "pacmans/turn/#{@name}/#{direction}",
       type: "PUT"
 
   addPacman: ->
@@ -92,20 +100,14 @@ class Grid
     y = pacman.position.y
     @cells.removeClass pacman.name
     @cell(x,y).addClass pacman.name
-    console.log @cell(x,y)
 
   update: (event)=>
-    console.log event.data
-    # DEBUG
-    return true
-
     pacmans = JSON.parse event.data
     if pacmans.length > 0
       @updateNames(pacman.name for pacman in pacmans)
-      console.log "aho!", @names
       @updateOne(pacman) for pacman in pacmans
 
-  errback: (e)->
+  errback: (e)=>
     console.log e
 
   startStream: (id)->
