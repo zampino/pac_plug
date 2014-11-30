@@ -49,14 +49,14 @@ class @HomeView
       @turn dir
 
   turn: (direction)->
-    $.ajax "pacmans/turn/#{@name}/#{direction}",
+    $.ajax "pacmans/turn/#{@id}/#{@name}/#{direction}",
       type: "PUT"
 
   addPacman: ->
-    $.post "/pacmans/add/#{@name}"
+    $.post "/pacmans/add/#{@id}/#{@name}"
     @running = true
     @updateButton()
-    @grid.addName(@name, @color)
+    @grid.addName("pacman_#{@id}", @color)
 
   updateButton: ->
     $("#name_chosen", @$controls).attr('disabled', @running)
@@ -64,10 +64,10 @@ class @HomeView
 class Grid
   _.extend(@prototype, Utils)
 
-  constructor: (id)->
+  constructor: (@id)->
     @$el = $('#grid')
     @buildCells()
-    @startStream(id)
+    @startStream()
     @names = []
 
   addName: (name, color)->
@@ -79,8 +79,9 @@ class Grid
     styles.addRule(".#{name}", "background: #{color}", 0);
 
   updateNames:(names) ->
+    oldNames = _.difference @names, names
     newNames = _.difference names, @names
-    return if _.isEmpty(newNames)
+    @cells.removeClass(old) for old in oldNames
     @addName(name, @randomColor()) for name in newNames
 
   buildCells: ->
@@ -104,13 +105,13 @@ class Grid
   update: (event)=>
     pacmans = JSON.parse event.data
     if pacmans.length > 0
-      @updateNames(pacman.name for pacman in pacmans)
       @updateOne(pacman) for pacman in pacmans
+      @updateNames(pacman.name for pacman in pacmans)
 
   errback: (e)=>
     console.log e
 
-  startStream: (id)->
-    source = new EventSource("pacmans/stream/#{id}")
+  startStream: ->
+    source = new EventSource("pacmans/stream/#{@id}")
     source.addEventListener 'message', @update, false
     source.addEventListener 'error', @errback, false

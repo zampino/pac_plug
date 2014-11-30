@@ -1,20 +1,20 @@
-require PacPlug.Router
+# require PacPlug.Router
 
 defmodule PacPlug do
-  import Plug.Connection
+  import Plug.Conn
 
-	def init(_options\\[]) do
-		# IO.puts "booting"
-	end
+  def init(_options\\[]) do
+    # IO.puts "booting"
+  end
 
-	def boot do
-		Pacman.boot
-		Plug.Adapters.Cowboy.http PacPlug, []
-	end
+  def boot do
+    Pacman.boot
+    Plug.Adapters.Cowboy.http PacPlug, []
+  end
 
-	def call(conn, _opts) do
-		# conn = Plug.Parsers.call(conn, parsers: [:urlencoded, :multipart])
-		PacPlug.Router.call(conn, PacPlug.Router.init)
-	end
+  def call(conn, _opts) do
+    # conn = Plug.Parsers.call(conn, parsers: [:urlencoded, :multipart])
+    PacPlug.Router.call(conn, PacPlug.Router.init)
+  end
 
 end

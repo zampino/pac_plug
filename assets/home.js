@@ -81,16 +81,16 @@
     };
 
     HomeView.prototype.turn = function(direction) {
-      return $.ajax("pacmans/turn/" + this.name + "/" + direction, {
+      return $.ajax("pacmans/turn/" + this.id + "/" + this.name + "/" + direction, {
         type: "PUT"
       });
     };
 
     HomeView.prototype.addPacman = function() {
-      $.post("/pacmans/add/" + this.name);
+      $.post("/pacmans/add/" + this.id + "/" + this.name);
       this.running = true;
       this.updateButton();
-      return this.grid.addName(this.name, this.color);
+      return this.grid.addName("pacman_" + this.id, this.color);
     };
 
     HomeView.prototype.updateButton = function() {
@@ -105,11 +105,12 @@
     _.extend(Grid.prototype, Utils);
 
     function Grid(id) {
+      this.id = id;
       this.errback = __bind(this.errback, this);
       this.update = __bind(this.update, this);
       this.$el = $('#grid');
       this.buildCells();
-      this.startStream(id);
+      this.startStream();
       this.names = [];
     }
 
@@ -125,14 +126,16 @@
     };
 
     Grid.prototype.updateNames = function(names) {
-      var name, newNames, _i, _len, _results;
+      var name, newNames, old, oldNames, _i, _j, _len, _len1, _results;
+      oldNames = _.difference(this.names, names);
       newNames = _.difference(names, this.names);
-      if (_.isEmpty(newNames)) {
-        return;
+      for (_i = 0, _len = oldNames.length; _i < _len; _i++) {
+        old = oldNames[_i];
+        this.cells.removeClass(old);
       }
       _results = [];
-      for (_i = 0, _len = newNames.length; _i < _len; _i++) {
-        name = newNames[_i];
+      for (_j = 0, _len1 = newNames.length; _j < _len1; _j++) {
+        name = newNames[_j];
         _results.push(this.addName(name, this.randomColor()));
       }
       return _results;
@@ -174,24 +177,22 @@
     };
 
     Grid.prototype.update = function(event) {
-      var pacman, pacmans, _i, _len, _results;
+      var pacman, pacmans, _i, _len;
       pacmans = JSON.parse(event.data);
       if (pacmans.length > 0) {
-        this.updateNames((function() {
-          var _i, _len, _results;
+        for (_i = 0, _len = pacmans.length; _i < _len; _i++) {
+          pacman = pacmans[_i];
+          this.updateOne(pacman);
+        }
+        return this.updateNames((function() {
+          var _j, _len1, _results;
           _results = [];
-          for (_i = 0, _len = pacmans.length; _i < _len; _i++) {
-            pacman = pacmans[_i];
+          for (_j = 0, _len1 = pacmans.length; _j < _len1; _j++) {
+            pacman = pacmans[_j];
             _results.push(pacman.name);
           }
           return _results;
         })());
-        _results = [];
-        for (_i = 0, _len = pacmans.length; _i < _len; _i++) {
-          pacman = pacmans[_i];
-          _results.push(this.updateOne(pacman));
-        }
-        return _results;
       }
     };
 
@@ -199,9 +200,9 @@
       return console.log(e);
     };
 
-    Grid.prototype.startStream = function(id) {
+    Grid.prototype.startStream = function() {
       var source;
-      source = new EventSource("pacmans/stream/" + id);
+      source = new EventSource("pacmans/stream/" + this.id);
       source.addEventListener('message', this.update, false);
       return source.addEventListener('error', this.errback, false);
     };
