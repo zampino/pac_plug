@@ -1,13 +1,15 @@
 # require PacPlug.Router
 
 defmodule PacPlug do
-  import Plug.Conn
+  use Application
+  # import Plug.Conn
 
   def init(_options\\[]) do
     # IO.puts "booting"
   end
 
-  def boot do
+  def start(_how, _) do
+    IO.puts "booting"
     Pacman.boot
     Plug.Adapters.Cowboy.http PacPlug, []
   end

@@ -11,12 +11,16 @@ defmodule PacPlug.Mixfile do
 
   # Configuration for the OTP application
   def application do
-    [applications: [:cowboy, :plug]]
+    [
+      applications: [:cowboy, :plug],
+      mod: {PacPlug, []}
+    ]
   end
 
   defp deps do
     [{ :cowboy, "~> 1.0.0" },
-     { :pacman, path: "../pacman" }, #github: "zampino/pacman", branch: "master"},
+     # { :pacman, path: "../pacman" },
+     { :pacman, github: "zampino/pacman", branch: "master"},
      { :plug, "~> 0.8.4" }]
   end
 end
