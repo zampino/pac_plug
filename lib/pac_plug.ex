@@ -11,7 +11,8 @@ defmodule PacPlug do
   def start(_how, _) do
     IO.puts "booting"
     Pacman.boot
-    Plug.Adapters.Cowboy.http PacPlug, []
+    port = String.to_integer System.get_env["PORT"] || '4000'
+    Plug.Adapters.Cowboy.http PacPlug, [], port: port
   end
 
   def call(conn, _opts) do

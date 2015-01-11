@@ -21,6 +21,6 @@ defmodule PacPlug.Mixfile do
     [{ :cowboy, "~> 1.0.0" },
      # { :pacman, path: "../pacman" },
      { :pacman, github: "zampino/pacman", branch: "master"},
-     { :plug, "~> 0.8.4" }]
+     { :plug, "~> 0.9" }]
   end
 end
