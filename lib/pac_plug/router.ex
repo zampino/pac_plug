@@ -5,7 +5,7 @@ defmodule PacPlug.Router do
   plug :match
   plug :dispatch
 
-  def init(options\\[]) do
+  def init(_options\\[]) do
   end
 
   get "/" do
@@ -23,19 +23,11 @@ defmodule PacPlug.Router do
     conn = put_resp_content_type(conn, "text/event-stream")
     conn = send_chunked(conn, 200)
     {:ok, conn} = chunk(conn, "retry: 10000\nevent: handshake\ndata: #{id}\n\n")
-    conn_id = String.to_atom(id)
-    IO.puts ">>>> #{conn_id} for #{inspect(self)} <<<<"
-    Process.register self, conn_id
-    Pacman.register_output conn_id
-
-    # NOTE: this call MUST be blocking
-    #       otherwise with either eventsource tries
-    #       a reconnect or :dispatch complains we
-    #       didn't return a connection
-    stream_state(conn_id, conn)
+    IO.puts ">>>> #{id} for #{inspect(self)} <<<<"
+    Pacman.register_output self
+    stream_state(id, conn)
   end
 
-  # TODO: restuful routes with the parser plug!
   post "/pacmans/add/:id/:name" do
     Pacman.add :"pacman_#{id}" #, name: name
     conn = put_resp_content_type(conn, "application/json")
@@ -66,7 +58,7 @@ defmodule PacPlug.Router do
     {status, conn_or_reason} = chunk(conn, "data: #{state}\n\n")
     if status == :error do
       IO.puts("#{status}: #{conn_or_reason}, exiting...")
-      Pacman.remove_output id
+      Pacman.remove_output self
       Pacman.remove :"pacman_#{id}"
       :timer.sleep 1000
       Process.exit self, :normal
